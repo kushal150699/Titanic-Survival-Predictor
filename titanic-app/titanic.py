@@ -5,9 +5,7 @@
 
 import pickle
 import pandas as pd
-import seaborn as sns
 from sklearn.model_selection import train_test_split
-sns.set()
 
 train=pd.read_csv("Dataset/train.csv")
 test=pd.read_csv("Dataset/test.csv")
