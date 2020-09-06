@@ -6,6 +6,7 @@
 import pickle
 import pandas as pd
 import seaborn as sns
+from sklearn.model_selection import train_test_split
 sns.set()
 
 train=pd.read_csv("Dataset/train.csv")
@@ -58,24 +59,21 @@ print(test.head())
 X = train.iloc[:, 2:].values 
 Y = train.iloc[:, 1].values 
 
+X_train,X_test,Y_train,Y_test=train_test_split(X,Y,test_size=0.25, random_state=42)
+
 from sklearn.ensemble import RandomForestClassifier
-forest = RandomForestClassifier(criterion='gini', 
-                                           n_estimators=1100,
+forest = RandomForestClassifier(criterion='entropy',
+                                           n_estimators=100,
                                            max_depth=5,
-                                           min_samples_split=4,
                                            min_samples_leaf=5,
-                                           max_features='auto',
-                                           oob_score=True,
-                                           random_state=42,
-                                           n_jobs=-1,
-                                           verbose=1)
-forest.fit(X, Y)
+                                           random_state=42)
+forest.fit(X_train, Y_train)
 
 filename = 'model.pkl'
 pickle.dump(forest, open(filename, 'wb'))
 
 loaded_model = pickle.load(open(filename, 'rb'))
-result = loaded_model.score(X, Y)
+result = loaded_model.score(X_test, Y_test)
 print('Accuracy: %.2f' %(result * 100) + '%')
 
 
